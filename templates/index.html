@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Prediction System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="icon"><i class="fa-solid fa-plus"></i></div>
+            Insurance Prediction System
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="#"><i class="fa-solid fa-circle-info"></i> About</a>
+            <a href="#"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <section class="card">
+            <div class="card-header">
+                <h2 class="card-title">Customer Information</h2>
+                <div class="header-icon"><i class="fa-solid fa-file-shield"></i></div>
+            </div>
+            <p class="card-subtitle">Please enter the customer details below to get predictions</p>
+
+            <form>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-user"></i> Age</label>
+                        <input type="number" class="form-control" placeholder="Enter age" name="age" id="age">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-venus-mars"></i> Gender</label>
+                        <select class="form-control" name="gender" id="gender">
+                            <option value="" disabled selected>Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-weight-scale"></i> BMI</label>
+                        <input type="number" step="0.1" class="form-control" placeholder="Enter BMI" name="bmi" id="bmi">
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-children"></i> Number of Children</label>
+                        <input type="number" class="form-control" placeholder="Enter number of children" name="children" id="children">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-location-dot"></i> Region</label>
+                        <select class="form-control" name="region" id="region">
+                            <option value="" disabled selected>Select region</option>
+                            <option value="northeast">Northeast</option>
+                            <option value="northwest">Northwest</option>
+                            <option value="southeast">Southeast</option>
+                            <option value="southwest">Southwest</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-submit" id="predict-btn">
+                    <i class="fa-solid fa-calculator"></i> Predict Now
+                </button>
+            </form>
+        </section>
+
+        <section class="card">
+            <div class="card-header">
+                <h2 class="card-title">Prediction Results</h2>
+                <div class="header-icon" style="background: #f5f3ff; color: #7c3aed;"><i class="fa-solid fa-chart-pie"></i></div>
+            </div>
+            <p class="card-subtitle">Your insurance predictions will appear here</p>
+
+            <div class="results-container">
+                <div class="result-box expense">
+                    <div class="result-icon">
+                        <i class="fa-solid fa-sack-dollar"></i>
+                    </div>
+                    <div class="result-content">
+                        <h4>Predicted Expense</h4>
+                        <div class="value" id="expense-result">₹ 0.00</div>
+                        <p>Estimated annual insurance expense</p>
+                    </div>
+                </div>
+
+                <div class="result-box discount">
+                    <div class="result-icon">
+                        <i class="fa-solid fa-shield-check"></i>
+                    </div>
+                    <div class="result-content">
+                        <h4>Discount Eligibility</h4>
+                        <div class="value" id="discount-result">Awaiting Data...</div>
+                        <p>This customer is eligible for discount</p>
+                    </div>
+                </div>
+
+                <div class="result-box note">
+                    <div class="result-icon">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div class="result-content">
+                        <strong>Note:</strong> Predictions are based on machine learning models and historical data analysis.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="footer-graphics">
+        <div class="footer-icons">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <i class="fa-solid fa-file-shield"></i>
+            <i class="fa-solid fa-stethoscope"></i>
+            <i class="fa-solid fa-clipboard-list"></i>
+        </div>
+        <div class="umbrella-icon"></div> 
+    </div>
+
+    <footer class="footer-bottom">
+        <div class="logo-small">
+            <i class="fa-solid fa-shield-halved"></i> Insurance Prediction System
+        </div>
+        <div>
+            &copy; 2024 Insurance Prediction System. All rights reserved.
+        </div>
+        <div>
+            Built with <span style="color: #ef4444;">&hearts;</span> for better predictions
+        </div>
+    </footer>
+    
+    <script>
+    document.getElementById('predict-btn').addEventListener('click', async function() {
+        // 1. Gather data from the form
+        const requestData = {
+            age: parseFloat(document.getElementById('age').value),
+            gender: document.getElementById('gender').value,
+            bmi: parseFloat(document.getElementById('bmi').value),
+            children: parseInt(document.getElementById('children').value),
+            region: document.getElementById('region').value
+        };
+
+        // Basic validation
+        if (!requestData.age || !requestData.gender || !requestData.bmi || !requestData.region) {
+            alert("Please fill out all fields!");
+            return;
+        }
+
+        // 2. Send data to the Flask backend
+        try {
+            document.getElementById('predict-btn').innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Calculating...';
+            
+            // USING THE ABSOLUTE FLASK URL
+            const response = await fetch('http://127.0.0.1:5501/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            const result = await response.json();
+
+            // 3. Display the results on the UI
+            if (result.success) {
+                document.getElementById('expense-result').innerText = '₹ ' + result.predicted_expense.toLocaleString();
+                
+                const discountDiv = document.getElementById('discount-result');
+                if (result.discount_eligible) {
+                    discountDiv.innerText = "Eligible for Discount";
+                    discountDiv.style.color = "#16a34a"; // Green
+                } else {
+                    discountDiv.innerText = "Not Eligible";
+                    discountDiv.style.color = "#dc2626"; // Red
+                }
+            } else {
+                alert("Error making prediction: " + result.error);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to connect to the server. Please ensure Flask is running on port 5501.");
+        } finally {
+            // Reset button text
+            document.getElementById('predict-btn').innerHTML = '<i class="fa-solid fa-calculator"></i> Predict Now';
+        }
+    });
+    </script>
+
+</body>
+</html>
