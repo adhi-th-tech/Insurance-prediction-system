@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 # 1. Load models and preprocessors into memory ONCE when the server starts
 print("Loading machine learning models...")
-expense_model = joblib.load('expense_rf_model.pkl')
-discount_model = joblib.load('discount_rf_model.pkl')
+expense_model = joblib.load('expense_lr_model.pkl')
+discount_model = joblib.load('discount_svm_model.pkl')
 scaler_class = joblib.load('scaler_class.pkl')
 ordinal_encoder = joblib.load('ordinal_encoder.pkl')
 print("Models loaded successfully!")
